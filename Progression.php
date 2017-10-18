@@ -24,8 +24,8 @@ class Progression
         if ($progression->isGeometric()) {
             return 'progression is Geometric';
         } elseif ($progression->isArithmetic()) {
-                return 'progression is Arithmetic';
-            }
+            return 'progression is Arithmetic';
+        }
         return false;
     }
 
@@ -45,8 +45,11 @@ class Progression
     {
         $sequence = $this->sequence;
         $delta = $sequence[1] - $sequence[0];
+
         for ($index = 0; $index < sizeof($sequence) - 1; $index++) {
-            if (($sequence[$index + 1] - $sequence[$index]) != $delta) {
+            $epsilon = 0.00001;
+            $floatVal = $sequence[$index + 1] - $sequence[$index];
+            if (abs($floatVal - $delta) > $epsilon) {
                 return false;
             }
         }
@@ -59,6 +62,8 @@ class Progression
     private function isGeometric()
     {
         $sequence = $this->sequence;
+        #if first item zero value
+        if (!$sequence[0]) return false;
         if (sizeof($sequence) <= 1)
             return true;
         # Calculate ratio
@@ -76,13 +81,15 @@ class Progression
     /**
      * @throws Exception
      */
-    private function validateSequence(){
+    private function validateSequence()
+    {
         foreach ($this->sequence as &$value) {
             $value = trim($value);
             if (!is_numeric($value)) {
                 throw new Exception('Sequence is not valid');
             }
+            $value = (float)trim($value);
         }
-        if(!count($this->sequence))  throw new Exception('Sequence cannot be empty');
+        if (count($this->sequence) < 3) throw new Exception('Count of items in sequence must be > 2');
     }
 }
