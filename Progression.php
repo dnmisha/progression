@@ -71,7 +71,7 @@ class Progression
 
         # Check the ratio of the remaining
         for ($i = 1; $i < sizeof($sequence); $i++) {
-            if (($sequence[$i] / ($sequence[$i - 1])) != $ratio) {
+            if (!$sequence[$i - 1] || ($sequence[$i] / ($sequence[$i - 1])) != $ratio) {
                 return false;
             }
         }
